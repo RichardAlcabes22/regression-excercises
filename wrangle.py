@@ -64,6 +64,27 @@ def wrangle_zillow():
 
     BE SURE TO create a three-part variable to capture output of wrangle_zillow....ie train,validate,test = wrangle_zillow()
     '''    
-    df = split_zillow(
+    train, validate, test = split_zillow(
             clean_zillow(
                 get_df()))
+    return train, validate, test
+
+
+
+def remove_outliers(df, col_list, k=1.5):
+    '''
+    remove outliers from a dataframe based on a list of columns
+    using the tukey method.
+    returns a single dataframe with outliers removed
+    '''
+    col_qs = {}
+    for col in col_list:
+        col_qs[col] = q1, q3 = df[col].quantile([0.25, 0.75])
+    for col in col_list:
+        iqr = col_qs[col][0.75] - col_qs[col][0.25]
+        lower_fence = col_qs[col][0.25] - (k*iqr)
+        upper_fence = col_qs[col][0.75] + (k*iqr)
+        print(type(lower_fence))
+        print(lower_fence)
+        df = df[(df[col] > lower_fence) & (df[col] < upper_fence)]
+    return df
