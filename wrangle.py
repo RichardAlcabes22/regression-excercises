@@ -61,6 +61,8 @@ def wrangle_zillow():
     Drop the property land use id
     Drop rows with missingness
     Convert all floats to INT
+
+    BE SURE TO create a three-part variable to capture output of wrangle_zillow....ie train,validate,test = wrangle_zillow()
     '''    
     df = split_zillow(
             clean_zillow(
