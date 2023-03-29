@@ -4,6 +4,7 @@ import env
 import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
+import sklearn.preprocessing
 
 ######### USE THIS FOR THE zillow DATASET!!!!
 def get_df():
@@ -70,6 +71,36 @@ def wrangle_zillow():
     return train, validate, test
 
 
+# SCALE  continuous X_col with QUANTILE TRANSFORMER with 'normal' DIST
+
+def scale_zillow_col(train,validate,test):
+    '''
+    
+    accepts three dfs (train,val,test) and constructs X and y_train, _val, _test.  Then applies a 
+    QuantileTransformer with 'normal' output to the specified column(s).
+    Outputs normal, standard arrays based upon the scaled values of each col.
+    
+    '''
+    X_train = train.drop(columns=['beds','baths','taxable_value','built','fips'])
+    y_train = train['taxable_value']
+    y_train = pd.DataFrame(y_train)
+
+    X_validate = validate.drop(columns=['beds','baths','taxable_value','built','fips'])
+    y_validate = validate['taxable_value']
+    y_validate = pd.DataFrame(y_validate)
+
+    X_test = test.drop(columns=['beds','baths','taxable_value','built','fips'])
+    y_test = test['taxable_value']
+    y_test = pd.DataFrame(y_test)
+    
+    scaler = sklearn.preprocessing.QuantileTransformer(output_distribution='normal')
+    scaler.fit(X_train)
+
+    train_col_scaled = scaler.transform(X_train)
+    validate_col_scaled = scaler.transform(X_validate)
+    test_col_scaled = scaler.transform(X_test)
+
+    return train_col_scaled,validate_col_scaled,test_col_scaled
 
 def remove_outliers(df, col_list, k=1.5):
     '''
