@@ -39,7 +39,7 @@ def regression_errors(y,yhat):
     MSE = mean_squared_error(y,yhat,squared=False)
     RMSE = mean_squared_error(y,yhat)
 
-    return sse,sst,ssr,mse,rmse
+    return SSE,SST,SSR,MSE,RMSE
 ##########################################################################
 
 def baseline_mean_errors(y):
