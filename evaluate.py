@@ -53,3 +53,24 @@ def baseline_mean_errors(y):
     SSE = (y - y.mean()).sum()
     MSE = SSE / len(y)
     RMSE = MSE**0.5
+
+    return SSE,MSE,RMSE
+
+########################################################################
+
+def better_than_baseline(y, yhat):
+    '''
+    a function to take in
+      an array/Series of target "y" values, and compare it to
+      the BASELINE model
+    
+    '''
+
+    SSE = mean_squared_error(y,yhat) * len(y)
+    SST = mean_squared_error(y,y.mean()) * len(y)
+    SSR = SST - SSE 
+
+    if SSR > 0:
+        return "True, the model performs better than the baseline"
+    else:
+        return "False, the model displays no improvement upon baseline"
