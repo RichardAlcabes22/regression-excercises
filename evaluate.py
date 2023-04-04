@@ -5,8 +5,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from sklearn.metrics import mean_squared_error
+from sklearn.feature_selection import SelectKBest, RFE, f_regression, SequentialFeatureSelector
+from sklearn.linear_model import LinearRegression
 
+###########################################################################
+def select_kbest(X_train,y_train,top_k=3):
+    kbest = SelectKBest(f_regression,k=top_k)
+    _ = kbest.fit(X_train,y_train)
+    
+    return X_train.columns[kbest.get_support()]
 
+def rfe(X_train,y_train,top_k=3):
+    from sklearn.linear_model import LinearRegression
+    model = LinearRegression()
+    rfe = RFE(model, n_features_to_select=top_k)
+    rfe.fit(X_train,y_train)
+    return X_train.columns[rfe.get_support()]
+
+###########################################################################
 def plot_residuals(y, yhat):
     '''
     a function to take in
@@ -74,3 +90,5 @@ def better_than_baseline(y, yhat):
         return "True, the model performs better than the baseline"
     else:
         return "False, the model displays no improvement upon baseline"
+    
+
