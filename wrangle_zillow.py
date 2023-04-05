@@ -11,20 +11,20 @@ import seaborn as sns
 from sklearn.model_selection import train_test_split
 from sklearn.impute import SimpleImputer
 
-from env import user, password, host
+from env import user, pwd, host
 import warnings
 warnings.filterwarnings('ignore')
 
 #**************************************************Acquire*******************************************************
 
 def acquire_zillow():
-    if os.path.exists('zillow_2017.csv'):
+    if os.path.exists('zillow_pred_2017.csv'):
         print('local version found!')
-        return pd.read_csv('zillow_2017.csv', index_col=0)
+        return pd.read_csv('zillow_pred_2017.csv', index_col=0)
     else:
         ''' Acquire data from Zillow using env imports and rename columns'''
 
-        url = f"mysql+pymysql://{user}:{password}@{host}/zillow"
+        url = f"mysql+pymysql://{user}:{pwd}@{host}/zillow"
 
         query = """
 
